@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}List of Contacts{% endblock title %}
+
+{% block body %}
+<div class="container mt-4">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-2 rounded">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item active fw-bold" aria-current="page">Contacts</li>
+        </ol>
+    </nav>
+
+    <!-- Page Title with Modern Gradient -->
+    <h1 class="text-center text-white py-3 shadow-lg"
+        style="background: linear-gradient(90deg, #007bff, #6610f2); border-radius: 10px;">
+        📜 Contact List
+    </h1>
+
+    <!-- Table Container -->
+    <div class="table-responsive shadow-sm p-4 bg-white rounded">
+        <table class="table table-hover table-striped table-bordered align-middle" id="contactsTable">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contactList %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ contact.name }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.phone }}</td>
+                    <td>{{ contact.desc }}</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a href="{{ contact.id }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            <a href="/contact/{{ contact.id }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-pencil"></i> Update
+                            </a>
+                            <a href="/delete_contactList/{{ contact.id }}" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- DataTables JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        $('#contactsTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "responsive": true,
+            "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
+            "language": {
+                "search": "🔍 Search:",
+                "lengthMenu": "Show _MENU_ contacts per page",
+                "info": "Showing _START_ to _END_ of _TOTAL_ contacts"
+            },
+            "columnDefs": [
+                { "orderable": false, "targets": 5 } 
+            ]
+        });
+    });
+</script>
+
+{% endblock body %}

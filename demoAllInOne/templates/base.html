@@ -77,8 +77,15 @@
                     <a class="nav-link" href="/contact">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/contactList">ContactList</a>
                 </li>
+
+                {% if request.user == "" %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
