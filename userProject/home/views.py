@@ -25,6 +25,6 @@ def loginUser(request):
     return render(request, 'login.html')
 
 def logoutUser(request):
-    print("Logout")
+    
     logout(request)
     return redirect('/login')
