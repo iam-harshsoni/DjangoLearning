@@ -3,6 +3,8 @@ from datetime import datetime
 from home.models import Contact
 from django.contrib import messages
 from django.contrib.auth import logout,login, authenticate
+from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -22,7 +24,13 @@ def about(request):
 def services(request):
     return render(request, "services.html")
 
+
+@login_required(login_url="/login/") #can use this login_required decorator 
 def contact(request):
+
+    # if not request.user.is_authenticated:
+    #     return redirect("/login/")
+
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
