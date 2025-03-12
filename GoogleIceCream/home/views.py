@@ -20,7 +20,7 @@ def index(request):
 
 def about(request):
     return render(request, 'about.html')
-
+3
 def services(request):
     return render(request, "services.html")
 
