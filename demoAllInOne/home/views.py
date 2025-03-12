@@ -60,8 +60,13 @@ def contactList(request):
         return redirect("/login")
     
     queryset = Contact.objects.all()
-    context={'contactList' : queryset}
+    
 
+    search_query = request.GET.get("search")
+    if search_query:
+        queryset = Contact.objects.filter(name__icontains=search_query) | Contact.objects.filter(email__icontains=search_query) | Contact.objects.filter(phone__icontains=search_query) | Contact.objects.filter(desc__icontains=search_query) 
+
+    context={'contactList' : queryset}
     return render(request, "contactList.html", context)
 
 def delete_contactList(request,id):
