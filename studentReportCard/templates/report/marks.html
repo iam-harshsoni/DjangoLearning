@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %} Marks {% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5">
+
+    <div class="student-info mb-4">
+        <h2 class="text-primary">Student Information</h2>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                {% for student in student_queryset %}
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <p><strong>ID:</strong> {{ student.student_id }}</p>
+                        <p><strong>Name:</strong> {{ student.student_name }}</p>
+                        <p><strong>Department:</strong> {{ student.department }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        {% comment %} <p><strong>Rank:</strong> {{ current_rank }}</p> {% endcomment %}
+                        <p><strong>Rank:</strong> {{ queryset.first.student.studentreportcard.first.student_rank }}</p>
+                        <p><strong>Total:</strong> {{ total_marks.total_marks }}</p>
+                        <p><strong>Date Generated:</strong> {{ queryset.first.student.studentreportcard.first.report_card_generated_date }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Marks</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Marks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if queryset %}
+                    {% for marks in queryset %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ marks.subject }}</td>
+                        <td>{{ marks.marks }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">No marks found</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

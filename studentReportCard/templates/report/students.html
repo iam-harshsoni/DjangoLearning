@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %} Students {% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5">
+<form method="GET" class="form-inline mb-3 d-flex justify-content-between align-items-center" style="max-width: 400px;">
+    <input class="form-control mr-sm-2" type="search" name='search' placeholder="Search by name" aria-label="Search">
+    <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+    
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h3>Students</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Id</th>
+                <th scope="col">Student Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Email</th>
+                <th scope="col">Age</th>
+                <th scope="col">Address</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% if queryset %}
+            {% for student in queryset %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td> 
+                    {% comment %} 
+                        Using hardcoded URLs is not a good practice 
+                        because if the URL pattern changes in urls.py, 
+                        we will need to update it everywhere. Instead, use 
+                        the URL template tag with the name defined in urls.py. 
+                    {% endcomment %}
+                    
+                    {% comment %} <a href="/marks/{{ student.id }}"> {% endcomment %}
+                    
+                    <a href="{% url 'marks' student.student_id %}">{{ student.student_id }}</a>
+                </td>
+                <td>{{ student.student_name }}</td>
+                <td>{{ student.department }}</td>
+                <td>{{ student.student_email }}</td>
+                <td>{{ student.student_age }}</td>
+                <td>{{ student.student_address }}</td>
+
+                {% endfor %}
+                {% else %}
+            <tr>
+                <td colspan="7" class="text-center">No students found</td>
+            </tr>
+            {% endif %}
+
+
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if queryset.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ queryset.previous_page_number }}">Previous</a></li>
+            {% endif %}
+
+            {% for num in queryset.paginator.page_range %}
+            {% if num <= 3 or num == queryset.paginator.num_pages or num >= queryset.number|add:"-1" and num <= queryset.number|add:"1" %}
+            <li class="page-item {% if queryset.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% elif num == 4 %}
+            <li class="page-item disabled"><a class="page-link">...</a></li>
+            {% endif %}
+            {% endfor %}
+            
+            {% if queryset.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ queryset.next_page_number }}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ queryset.paginator.num_pages }}">Last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if queryset.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ queryset.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}.
+            </span>
+
+            {% if queryset.has_next %}
+            <a href="?page={{ queryset.next_page_number }}">next</a>
+            <a href="?page={{ queryset.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+{% endblock body %}
